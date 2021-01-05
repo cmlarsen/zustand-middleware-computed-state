@@ -52,7 +52,12 @@
     "manager",
     "management",
     "redux",
-    "store"
+    "store",
+    "zustand",
+    "computed",
+    "derived",
+    "selector",
+    "middleware"
   ],
   "author": "Caleb Larsen",
   "license": "MIT",
