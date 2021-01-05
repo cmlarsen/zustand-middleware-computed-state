@@ -59,7 +59,7 @@
   "bugs": {
     "url": "https://github.com/cmlarsen/zustand-middleware-computed-state/issues"
   },
-  "homepage": "https://github.com/cmlarsen/zustand-middleware-computed-state/zustand",
+  "homepage": "https://github.com/cmlarsen/zustand-middleware-computed-state",
   "jest": {
     "testRegex": "test.(js|ts|tsx)$",
     "coverageDirectory": "./coverage/",
