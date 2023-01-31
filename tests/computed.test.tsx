@@ -1,7 +1,6 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { act, cleanup, fireEvent, render } from '@testing-library/react'
-import create from 'zustand'
+import { cleanup, render } from '@testing-library/react'
+import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 import { computed } from '../src'
@@ -12,12 +11,21 @@ afterEach(() => {
   console.error = consoleError
 })
 
+interface Store {
+  count: number;
+  inc: () => void;
+}
+
+interface ComputedStore {
+  computedCount: number;
+}
+
 it('returns initial computed state', async () => {
-  const useStore = create<any>(
-    computed(
+  const useStore = create<Store & ComputedStore>(
+    computed<Store, ComputedStore>(
       (set) => ({
         count: 0,
-        inc: () => set((state) => ({ count: state.count + 1 })),
+        inc: () => set((state: any) => ({ count: state.count + 1 })),
       }),
       (state) => {
         return {
@@ -44,8 +52,8 @@ it('returns initial computed state', async () => {
   await findByText('computedCount: 10')
 })
 it('computed state updates when the state updates', async () => {
-  const useStore = create<any>(
-    computed(
+  const useStore = create<Store & ComputedStore>(
+    computed<Store, ComputedStore>(
       (set) => ({
         count: 0,
         inc: () => set((state) => ({ count: state.count + 1 })),
@@ -76,8 +84,8 @@ it('computed state updates when the state updates', async () => {
 })
 
 it('computed state updates when state updated via API', async () => {
-  const useStore = create<any>(
-    computed(
+  const useStore = create<Store & ComputedStore>(
+    computed<Store, ComputedStore>(
       (set) => ({
         count: 0,
         inc: () => set((state) => ({ count: state.count + 1 })),
@@ -109,8 +117,8 @@ it('computed state updates when state updated via API', async () => {
 })
 
 it('computed state updates when object shorthand', async () => {
-  const useStore = create<any>(
-    computed(
+  const useStore = create<Store & ComputedStore>(
+    computed<Store, ComputedStore>(
       (set) => ({
         count: 0,
         inc: () => set({ count: 1 }),
@@ -141,9 +149,9 @@ it('computed state updates when object shorthand', async () => {
 })
 
 it('computed state when composed with devtools middleware', async () => {
-  const useStore = create<any>(
-    devtools(
-      computed(
+  const useStore = create(
+    devtools<Store & ComputedStore>(
+      computed<Store, ComputedStore>(
         (set) => ({
           count: 0,
           inc: () => set((state) => ({ count: state.count + 1 })),

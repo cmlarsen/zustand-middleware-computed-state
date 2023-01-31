@@ -1,25 +1,21 @@
 import {
-  GetState,
-  SetState,
-  State,
   StateCreator,
   StoreApi,
-} from 'zustand/index'
+} from 'zustand';
 
-export declare type ComputedState<S extends State> = (state: S) => State
+export declare type ComputedState<S> = (state: S) => S
 
-export const computed = <S extends State, C extends State>(
-  create: StateCreator<S>,
-  compute: (state: S) => C
-) => (set: SetState<S>, get: GetState<S>, api: StoreApi<S>): S & C => {
-  const setWithComputed: SetState<S> = (update, replace) => {
-    set((state) => {
-      const updated = typeof update === 'object' ? update : update(state)
-      const computedState = compute({ ...state, ...updated })
-      return { ...updated, ...computedState }
-    }, replace)
-  }
-  api.setState = setWithComputed
-  const state = create(setWithComputed, get, api)
-  return { ...state, ...compute(state) }
-}
+export const computed =
+  <S, C>(create: StateCreator<S>, compute: (state: S) => C) =>
+    (set: StoreApi<S>['setState'], get: StoreApi<S>['getState'], api: StoreApi<S>): S & C => {
+      const setWithComputed: StoreApi<S>['setState'] = (update, replace) => {
+        set((state) => {
+          const updated = typeof update === 'function' ? (update as (state: S) => Partial<S> | S)(state) : update;
+          const computedState = compute({ ...state, ...updated } as S);
+          return { ...updated, ...computedState };
+        }, replace);
+      };
+      api.setState = setWithComputed;
+      const state = create(setWithComputed, get, api);
+      return { ...state, ...compute(state) };
+    };
