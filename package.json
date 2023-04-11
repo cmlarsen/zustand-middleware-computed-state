@@ -1,7 +1,7 @@
 {
     "name": "zustand-middleware-computed-state",
     "private": true,
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Computed state middleware for Zustand",
     "main": "index.cjs.js",
     "module": "index.js",
