@@ -61,3 +61,52 @@ function Counter() {
   )
 }
 ```
+
+## TypeScript
+code below demonstrates how you can use it with Typescript:
+```typescript
+import { create } from "zustand";
+import { computed } from "zustand-middleware-computed-state";
+
+type ComputedStore = {
+  sum: number;
+};
+
+type Store = {
+  x: number;
+  y: number;
+  incX: (by: number) => void
+  incY: (by: number) => void
+};
+
+type SetType = (
+  partial:
+    | Store
+    | Partial<Store>
+    | ((state: Store) => Store | Partial<Store>),
+  replace?: boolean | undefined
+) => void;
+
+type CombinedStore = State & ComputedStore;
+
+function computedState(state: Store): ComputedStore {
+  return {
+    sum: state.x + state.y,
+  };
+}
+
+const usePlanetsStore = create<CombinedStore>(
+  computed<Store, ComputedStore>(
+    (set: SetType) => ({
+      x: 0,
+      y: 0,
+      incX: (by) => set(store => ({x: state.x + by})),
+      incY: (by) => set(store => ({y: state.y + by}))
+    }),
+    computedState
+  )
+);
+
+export default usePlanetsStore;
+
+```
