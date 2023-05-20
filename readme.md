@@ -95,7 +95,7 @@ function computedState(state: Store): ComputedStore {
   };
 }
 
-const usePlanetsStore = create<CombinedStore>(
+const useSampleStore = create<CombinedStore>(
   computed<Store, ComputedStore>(
     (set: SetType) => ({
       x: 0,
@@ -107,6 +107,6 @@ const usePlanetsStore = create<CombinedStore>(
   )
 );
 
-export default usePlanetsStore;
+export default useSampleStore;
 
 ```
